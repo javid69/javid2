@@ -1,0 +1,23 @@
+entrypoint = "scripts/replit-dev.sh"
+run = "bash scripts/replit-dev.sh"
+
+[nix]
+path = "replit.nix"
+
+[env]
+HOST = "0.0.0.0"
+PORT = "3000"
+
+[packager]
+language = "nodejs"
+workingDirectory = "."
+installCommands = ["npm install"]
+cachePaths = ["node_modules", ".next"]
+
+[[workspace.commands]]
+name = "Install dependencies"
+command = "npm install"
+
+[[workspace.commands]]
+name = "Run lint"
+command = "npm run lint"
