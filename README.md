@@ -1,4 +1,13 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This project implements an interactive sneaker configurator built with Next.js, React Three Fiber, and Zustand.
+
+## Assets
+
+Procedural textures and the glTF sneaker model can be regenerated with:
+
+```bash
+node scripts/generate-textures.mjs
+node scripts/build-sneaker-gltf.mjs
+```
 
 ## Getting Started
 
