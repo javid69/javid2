@@ -1,42 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Yashvi Studio Starter
 
-## Getting Started
+An opinionated Next.js 14 App Router starter tailored for the "Yashvi" brand direction. It ships with a dark-first design system powered by Tailwind CSS tokens, rich motion primitives, and a curated creative tooling stack (Framer Motion, GSAP, and React Three Fiber) for building cinematic, interactive web experiences.
 
-First, run the development server:
+## ✨ Features
+
+- **Next.js 14 + TypeScript** using the App Router, templates, and server-first data flow.
+- **Design token system** expressed via CSS variables and exposed through Tailwind utilities for colors, typography, spacing, and radiuses.
+- **Global theming** with Zustand-powered mode switching and a fully dark default aesthetic.
+- **Motion + interaction stack** featuring Framer Motion, GSAP + ScrollTrigger registration, and a sample 3D scene with React Three Fiber and @react-three/postprocessing.
+- **Developer experience** via strict ESLint (with Prettier), Tailwind plugins, lint-staged, and Husky pre-commit hooks.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.18+ (Next.js 14 requires Node 18 or newer)
+- npm 9+
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+Start the local development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Linting & Formatting
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run lint` – run ESLint with the Next.js + TypeScript ruleset and Prettier enforcement.
+- `npm run format` – check formatting across supported file types.
+- `npm run format:write` – format files in place. (This is also handled automatically on commit via Husky + lint-staged.)
 
-## Developing on Replit
+### Production Build
 
-1. Open the repo in Replit using the **Import from GitHub** flow. Replit will use the `replit.nix` environment to install Node.js 20, npm/pnpm tooling, and the native `libvips` dependency that Next.js image optimization relies on.
-2. Press **Run**. The `.replit` configuration launches `scripts/replit-dev.sh`, which enables Corepack so pnpm is available, installs dependencies (with caching in `node_modules`) the first time it runs, and then starts the dev server with `npm run dev -- --hostname 0.0.0.0 --port $PORT` so it binds to the port Replit expects.
-3. The Webview panel proxies the running dev server, so edits you make in the editor hot-reload automatically.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 🧱 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                  # App Router entry points, root layout, templates, and pages
+├─ layout.tsx         # Global providers, meta defaults, navigation, and footer
+├─ template.tsx       # Client template controlling page transitions
+├─ page.tsx           # Sample Yashvi-branded landing experience + token showcase
+├─ providers.tsx      # Client-side providers (motion config, GSAP ScrollTrigger, theming)
+├─ globals.css        # Tailwind layers, design tokens, and utility extensions
+components/
+├─ layout/            # Layout primitives (SiteHeader, SiteFooter)
+├─ sections/          # Hero 3D scene built with React Three Fiber
+lib/
+├─ stores/            # Zustand stores (theme management)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Design Tokens & Tailwind
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Design tokens live in `app/globals.css` and are exposed to Tailwind through `tailwind.config.ts`. Customize colors, typography scale, spacing, radiuses, and gradients by editing the CSS variables. The sample page demonstrates their application across sections, token cards, and interactive CTAs.
 
-## Deploy on Vercel
+Tailwind plugins included:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `@tailwindcss/forms`
+- `@tailwindcss/typography`
+- `@tailwindcss/aspect-ratio`
+- `@tailwindcss/container-queries`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 Tooling & Automation
+
+- **ESLint** – Flat config extending the official Next.js rules with Prettier enforcement.
+- **Prettier** – Shared configuration (`prettier.config.mjs`) with the Tailwind CSS plugin.
+- **Husky + lint-staged** – Pre-commit hook runs ESLint and Prettier only on staged files.
+- **TypeScript** – Strict mode enabled via `tsconfig.json`.
+
+## 📚 Useful Scripts
+
+| Script                 | Description                           |
+| ---------------------- | ------------------------------------- |
+| `npm run dev`          | Start the Next.js development server. |
+| `npm run build`        | Create an optimized production build. |
+| `npm run start`        | Serve the production build locally.   |
+| `npm run lint`         | Run ESLint across the project.        |
+| `npm run format`       | Check Prettier formatting.            |
+| `npm run format:write` | Format supported files with Prettier. |
+
+## 📬 Contact
+
+Questions or feedback? Reach out at [hello@yashvi.studio](mailto:hello@yashvi.studio).
