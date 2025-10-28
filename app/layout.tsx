@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
+import { getAnalyticsConfig } from "@/lib/analytics/config";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,6 +13,8 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const analyticsConfig = getAnalyticsConfig();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AnalyticsProvider config={analyticsConfig}>{children}</AnalyticsProvider>
       </body>
     </html>
   );
