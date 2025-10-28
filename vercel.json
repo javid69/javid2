@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    },
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    },
+    "app/**/route.ts": {
+      "runtime": "nodejs20.x"
+    },
+    "app/**/route.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_ANALYTICS_WRITE_KEY": "@next_public_analytics_write_key",
+    "NEXT_PUBLIC_ANALYTICS_DATASET": "@next_public_analytics_dataset",
+    "API_BASE_URL": "@api_base_url"
+  }
+}

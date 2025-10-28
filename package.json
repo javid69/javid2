@@ -2,11 +2,16 @@
   "name": "project",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.11.0 <21"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy:preview": "bash ./scripts/vercel-deploy.sh preview",
+    "deploy:production": "bash ./scripts/vercel-deploy.sh production"
   },
   "dependencies": {
     "react": "19.2.0",
