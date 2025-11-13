@@ -15,8 +15,15 @@ model User {
   password      String?
   image         String?
   role          UserRole  @default(USER)
+  phone         String?
+  bio           String?
+  agency        String?
+  licenseNumber String?
+  yearsOfExp    Int?
+  visible       Boolean   @default(true)
   accounts      Account[]
   properties    Property[]
+  inquiries     Inquiry[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -55,8 +62,11 @@ model Property {
   propertyType PropertyType
   status       PropertyStatus @default(AVAILABLE)
   images       String[]
+  views        Int            @default(0)
+  featured     Boolean        @default(false)
   agentId      String
-  agent        User           @relation(fields: [agentId], references: [id])
+  agent        User           @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  inquiries    Inquiry[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -86,4 +96,31 @@ enum PropertyStatus {
   PENDING
   SOLD
   RENTED
+}
+
+model Inquiry {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String        @db.Text
+  status    InquiryStatus @default(NEW)
+  notes     String?       @db.Text
+  agentId   String
+  agent     User          @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  propertyId String
+  property  Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([agentId])
+  @@index([propertyId])
+  @@index([status])
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  LOST
 }
