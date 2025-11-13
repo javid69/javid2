@@ -1,34 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "Vercel deployment cockpit",
+  title: "ASYLEN VENTURES - Premium Real Estate Platform",
   description:
-    "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
-  metadataBase: new URL("https://vercel-finalize-deployment.vercel.app"),
+    "Discover your dream property with ASYLEN VENTURES. Premium real estate listings, expert agents, and seamless property management.",
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   openGraph: {
-    title: "Vercel deployment cockpit",
+    title: "ASYLEN VENTURES - Premium Real Estate Platform",
     description:
-      "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
-    url: "https://vercel-finalize-deployment.vercel.app",
-    siteName: "Vercel deployment cockpit",
+      "Discover your dream property with ASYLEN VENTURES. Premium real estate listings, expert agents, and seamless property management.",
+    siteName: "ASYLEN VENTURES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vercel deployment cockpit",
+    title: "ASYLEN VENTURES - Premium Real Estate Platform",
     description:
-      "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
+      "Discover your dream property with ASYLEN VENTURES. Premium real estate listings, expert agents, and seamless property management.",
   },
 };
 
@@ -38,10 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

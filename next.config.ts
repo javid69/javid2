@@ -7,24 +7,21 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.cto.new",
+        hostname: "res.cloudinary.com",
         port: "",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "assets.cto.new",
+        hostname: "images.unsplash.com",
         port: "",
         pathname: "/**",
       },
     ],
   },
   env: {
-    NEXT_PUBLIC_ANALYTICS_WRITE_KEY:
-      process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY ?? "",
-    NEXT_PUBLIC_ANALYTICS_DATASET:
-      process.env.NEXT_PUBLIC_ANALYTICS_DATASET ?? "",
-    API_BASE_URL: process.env.API_BASE_URL ?? "",
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL ?? "",
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ?? "",
   },
 };
 
