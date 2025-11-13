@@ -49,6 +49,8 @@ model Property {
   city         String
   state        String
   zipCode      String
+  latitude     Float?
+  longitude    Float?
   bedrooms     Int
   bathrooms    Int
   squareFeet   Int
@@ -64,6 +66,7 @@ model Property {
   @@index([status])
   @@index([city])
   @@index([propertyType])
+  @@index([latitude, longitude])
 }
 
 enum UserRole {
