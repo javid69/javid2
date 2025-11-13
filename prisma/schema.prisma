@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum PropertyStatus {
+  ACTIVE
+  INACTIVE
+  SOLD
+  PENDING
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  CONDO
+  TOWNHOUSE
+  VILLA
+  STUDIO
+  PENTHOUSE
+}
+
+enum PropertyCategory {
+  RESIDENTIAL
+  COMMERCIAL
+  LUXURY
+  INVESTMENT
+}
+
+enum InquiryStatus {
+  PENDING
+  RESPONDED
+  CLOSED
+}
+
+enum ViewingStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  password      String
+  role          UserRole  @default(USER)
+  avatar        String?
+  phone         String?
+  bio           String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  properties    Property[]
+  inquiries     Inquiry[]
+  viewingSchedules ViewingSchedule[]
+
+  @@map("users")
+}
+
+model Amenity {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  icon        String
+  category    String
+  description String?
+
+  // Relations
+  properties  PropertyAmenity[]
+
+  @@map("amenities")
+}
+
+model Property {
+  id            String            @id @default(cuid())
+  title         String
+  description   String
+  price         Int
+  bedrooms      Int
+  bathrooms     Int
+  area          Float
+  propertyType  PropertyType
+  category      PropertyCategory
+  location      String
+  latitude      Float
+  longitude     Float
+  videoUrl      String?
+  floorPlanUrl  String?
+  status        PropertyStatus    @default(ACTIVE)
+  featured      Boolean           @default(false)
+  viewCount     Int               @default(0)
+  agentId       String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  // Relations
+  agent         User              @relation(fields: [agentId], references: [id])
+  images        PropertyImage[]
+  amenities     PropertyAmenity[]
+  inquiries     Inquiry[]
+  viewingSchedules ViewingSchedule[]
+
+  @@map("properties")
+}
+
+model PropertyImage {
+  id           String   @id @default(cuid())
+  propertyId   String
+  url          String
+  publicId     String  // Cloudinary public_id for deletion
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_images")
+}
+
+model PropertyAmenity {
+  id         String   @id @default(cuid())
+  propertyId String
+  amenityId  String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, amenityId])
+  @@map("property_amenities")
+}
+
+model Inquiry {
+  id         String         @id @default(cuid())
+  propertyId String
+  userId     String
+  name       String
+  email      String
+  phone      String?
+  message    String
+  status     InquiryStatus  @default(PENDING)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  // Relations
+  property   Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id])
+
+  @@map("inquiries")
+}
+
+model ViewingSchedule {
+  id         String         @id @default(cuid())
+  propertyId String
+  userId     String
+  scheduledAt DateTime
+  status     ViewingStatus  @default(SCHEDULED)
+  notes      String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  // Relations
+  property   Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id])
+
+  @@map("viewing_schedules")
+}
