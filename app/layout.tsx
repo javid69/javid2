@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,22 +14,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vercel deployment cockpit",
+  title: "ASYLEN VENTURES - Real Estate Platform",
   description:
-    "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
+    "Premium real estate platform with comprehensive property management and authentication system.",
   metadataBase: new URL("https://vercel-finalize-deployment.vercel.app"),
   openGraph: {
-    title: "Vercel deployment cockpit",
+    title: "ASYLEN VENTURES - Real Estate Platform",
     description:
-      "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
+      "Premium real estate platform with comprehensive property management and authentication system.",
     url: "https://vercel-finalize-deployment.vercel.app",
-    siteName: "Vercel deployment cockpit",
+    siteName: "ASYLEN VENTURES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vercel deployment cockpit",
+    title: "ASYLEN VENTURES - Real Estate Platform",
     description:
-      "Operational dashboard summarizing environment state, release workflow, and health for the Vercel deployment.",
+      "Premium real estate platform with comprehensive property management and authentication system.",
   },
 };
 
@@ -42,7 +43,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );
