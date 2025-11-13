@@ -54,6 +54,8 @@ model Property {
   squareFeet   Int
   propertyType PropertyType
   status       PropertyStatus @default(AVAILABLE)
+  featured     Boolean        @default(false)
+  amenities    String[]
   images       String[]
   agentId      String
   agent        User           @relation(fields: [agentId], references: [id])
@@ -64,6 +66,7 @@ model Property {
   @@index([status])
   @@index([city])
   @@index([propertyType])
+  @@index([featured])
 }
 
 enum UserRole {

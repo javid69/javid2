@@ -27,6 +27,8 @@ export interface Property {
   squareFeet: number;
   propertyType: PropertyType;
   status: PropertyStatus;
+  featured: boolean;
+  amenities: string[];
   images: string[];
   agentId: string;
   createdAt: Date;
