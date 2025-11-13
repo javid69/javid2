@@ -48,3 +48,28 @@ export enum PropertyStatus {
   SOLD = "SOLD",
   RENTED = "RENTED",
 }
+
+export interface CloudinaryUploadResponse {
+  public_id: string;
+  url: string;
+  secure_url: string;
+  width: number;
+  height: number;
+  bytes: number;
+  format: string;
+}
+
+export interface ImageData {
+  url: string;
+  publicId: string;
+  width: number;
+  height: number;
+  order: number;
+}
+
+export interface UploadOptions {
+  folder?: "properties" | "avatars" | "floor-plans" | "documents";
+  propertyId?: string;
+  maxSize?: number;
+  allowedFormats?: string[];
+}
