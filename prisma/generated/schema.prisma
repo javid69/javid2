@@ -1,0 +1,304 @@
+// This is your Prisma schema file for ASYLEN VENTURES Real Estate Platform
+// Database schema with comprehensive models for users, properties, amenities, and inquiries
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  VISITOR
+  USER
+  AGENT
+  ADMIN
+}
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  INDEPENDENT_HOUSE
+  OFFICE
+  RETAIL
+  SHOWROOM
+  RESIDENTIAL_PLOT
+  COMMERCIAL_PLOT
+}
+
+enum PropertyCategory {
+  RESIDENTIAL
+  COMMERCIAL
+  LAND
+  LUXURY
+  RENTAL
+}
+
+enum PropertyStatus {
+  ACTIVE
+  SOLD
+  RENTED
+  INACTIVE
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  LOST
+}
+
+enum ViewingScheduleStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================================================
+// USER MODEL
+// ============================================================================
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  phone        String?
+  password     String?
+  name         String
+  avatar       String?
+  role         UserRole @default(VISITOR)
+  bio          String?
+  authProvider String?
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  properties       Property[]
+  favorites        Favorite[]
+  inquiries        Inquiry[]
+  viewingSchedules ViewingSchedule[]
+  propertyAlerts   PropertyAlert[]
+  accounts         Account[]
+  sessions         Session[]
+
+  @@index([email])
+  @@index([role])
+}
+
+// ============================================================================
+// PROPERTY MODEL
+// ============================================================================
+
+model Property {
+  id           String           @id @default(cuid())
+  title        String
+  description  String
+  price        BigInt
+  bedrooms     Int
+  bathrooms    Int
+  area         Float
+  propertyType PropertyType
+  category     PropertyCategory
+  location     String
+  city         String           @default("Noida")
+  latitude     Float
+  longitude    Float
+  agentId      String
+  agent        User             @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  featured     Boolean          @default(false)
+  status       PropertyStatus   @default(ACTIVE)
+  videoUrl     String?
+  floorPlanUrl String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  // Relations
+  images           PropertyImage[]
+  amenities        PropertyAmenity[]
+  favorites        Favorite[]
+  inquiries        Inquiry[]
+  viewingSchedules ViewingSchedule[]
+
+  @@index([agentId])
+  @@index([status])
+  @@index([category])
+  @@index([city])
+  @@index([propertyType])
+}
+
+// ============================================================================
+// PROPERTY IMAGE MODEL
+// ============================================================================
+
+model PropertyImage {
+  id                 String   @id @default(cuid())
+  propertyId         String
+  property           Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url                String
+  cloudinaryPublicId String
+  displayOrder       Int
+  createdAt          DateTime @default(now())
+
+  @@index([propertyId])
+}
+
+// ============================================================================
+// AMENITY MODEL
+// ============================================================================
+
+model Amenity {
+  id         String            @id @default(cuid())
+  name       String            @unique
+  icon       String
+  category   String?
+  properties PropertyAmenity[]
+
+  @@index([name])
+}
+
+// ============================================================================
+// PROPERTY AMENITY JUNCTION TABLE
+// ============================================================================
+
+model PropertyAmenity {
+  propertyId String
+  amenityId  String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([propertyId, amenityId])
+  @@index([propertyId])
+  @@index([amenityId])
+}
+
+// ============================================================================
+// FAVORITE MODEL
+// ============================================================================
+
+model Favorite {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, propertyId])
+  @@index([userId])
+  @@index([propertyId])
+}
+
+// ============================================================================
+// INQUIRY MODEL
+// ============================================================================
+
+model Inquiry {
+  id           String        @id @default(cuid())
+  propertyId   String
+  property     Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  visitorName  String
+  visitorEmail String
+  visitorPhone String
+  message      String
+  status       InquiryStatus @default(NEW)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([propertyId])
+  @@index([userId])
+  @@index([status])
+}
+
+// ============================================================================
+// VIEWING SCHEDULE MODEL
+// ============================================================================
+
+model ViewingSchedule {
+  id            String                @id @default(cuid())
+  propertyId    String
+  property      Property              @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scheduledDate DateTime
+  scheduledTime String
+  status        ViewingScheduleStatus @default(SCHEDULED)
+  notes         String?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@index([propertyId])
+  @@index([userId])
+  @@index([status])
+}
+
+// ============================================================================
+// PROPERTY ALERT MODEL
+// ============================================================================
+
+model PropertyAlert {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  minPrice      BigInt?
+  maxPrice      BigInt?
+  propertyTypes String?
+  category      String?
+  location      String?
+  bedrooms      Int?
+  bathrooms     Int?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ============================================================================
+// NEXTAUTH MODELS
+// ============================================================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
